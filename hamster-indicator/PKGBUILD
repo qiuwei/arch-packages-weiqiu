@@ -1,0 +1,64 @@
+# Maintainer: Wei Qiu<qiuwei1987@gmail.com>
+pkgname=hamster-indicator-ubuntu
+pkgver=0.1
+_gitver=037dd2e
+_ubuntu_rel=0ubuntu1
+pkgrel=1
+pkgdesc="indicator for time tracking program hamster-applet"
+arch=('any')
+url=""
+license=('GPL')
+groups=()
+depends=('python2' 'hicolor-icon-theme')
+makedepends=('python2')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=${pkgname}.install
+source=('https://launchpad.net/ubuntu/precise/+source/hamster-indicator/0.1+037dd2e-0ubuntu1/+files/hamster-indicator_0.1+037dd2e.orig.tar.gz' 'https://launchpad.net/ubuntu/precise/+source/hamster-indicator/0.1+037dd2e-0ubuntu1/+files/hamster-indicator_0.1+037dd2e-0ubuntu1.debian.tar.gz' 'hamster-indicator-ubuntu.install')
+noextract=()
+md5sums=('5dfd3542109a14b328c16e7bc56125b7'
+         '4ebc4c512aacf29a0161d8896262b2a3'
+         '9a534f9711be724f6d765a56f4b27436')
+
+build() {
+  cd "${srcdir}/${pkgname%-*}-${pkgver}+${_gitver}"
+
+  # Apply Ubuntu patches
+  for i in $(cat "${srcdir}/debian/patches/series" | grep -v '#'); do
+    patch -Np1 -i "${srcdir}/debian/patches/${i}"
+  done
+
+  sed 's/python/python2/g' -i hamster-indicator
+  sed 's/python/python2/g' -i setup.py
+
+  #
+  # BUILD HERE
+  #
+}
+
+package() {
+  cd "${srcdir}/${pkgname%-*}-${pkgver}+${_gitver}"
+  python2 setup.py build || return 1
+  python2 setup.py install --prefix=/usr --root=$pkgdir || return 1
+  install -dm755 "${pkgdir}/usr/share/man/1"
+  install -dm755 "${pkgdir}/usr/share/applications"
+  install -m644 -T "${srcdir}/debian/hamster-indicator.manpages" "${pkgdir}/usr/share/man/1/hamster-indicator.1"
+  install -m644  "${srcdir}/debian/hamster-indicator.desktop" "${pkgdir}/usr/share/applications/"
+}
+post_install(){
+  gtk-update-icon-cache -q -t -f usr/share/icons/hicolor
+}
+
+post_upgrade(){
+  gtk-update-icon-cache -q -t -f usr/share/icons/hicolor
+}
+
+post_remove(){
+  gtk-update-icon-cache -q -t -f usr/share/icons/hicolor
+}
+
+
+# vim:set ts=2 sw=2 et:

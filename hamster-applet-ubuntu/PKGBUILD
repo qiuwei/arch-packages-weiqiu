@@ -1,0 +1,46 @@
+# Maintainer: Wei Qiu<Wei at qiu dot es>
+# Contributor: Jan de Groot <jgc@archlinux.org>
+# Contributor: Georg Vogetseder <georg.vogetseder@gmail.com>
+
+pkgname=hamster-applet-ubuntu
+pkgver=2.91.3
+_gitver=git20110714.9aefd7
+_ubuntu_rel=2ubuntu4
+pkgrel=1
+pkgdesc="GNOME time tracking applet"
+arch=('any')
+url="http://projecthamster.wordpress.com/"
+license=('GPL')
+depends=('python2-dbus' 'python2-gconf' 'python2-notify' 'python2-wnck' 'python2-xdg' 'desktop-file-utils' 'hicolor-icon-theme' 'xdg-utils')
+makedepends=('intltool' 'gnome-doc-utils' 'gnome-control-center')
+options=('!emptydirs')
+install=$pkgname.install
+source=("https://launchpad.net/ubuntu/quantal/+source/${pkgname%-ubuntu}/${pkgver}+${_gitver}-${_ubuntu_rel}/+files/${pkgname%-ubuntu}_${pkgver}+${_gitver}.orig.tar.gz" "https://launchpad.net/ubuntu/quantal/+source/${pkgname%-ubuntu}/${pkgver}+${_gitver}-${_ubuntu_rel}/+files/${pkgname%-ubuntu}_${pkgver}+${_gitver}-${_ubuntu_rel}.debian.tar.gz" "hamster-applet-ubuntu.install")
+sha256sums=('4932eec07576a2ddc02e038e97ddc88985e1a27e0c12303a711bff303d411085'
+            '66edb6e5cbc6d0b8001337d31d39f60de81c5a22be8111f151d506f8763d59e8'
+            '48d77a9e683c84e6a94851a347516b15579be083077651b66338f55476e184d6')
+build() {
+  cd "$srcdir/${pkgname%-ubuntu}-$pkgver+${_gitver}"
+  
+  #Apply Ubuntu packages
+  for i in $(cat "${srcdir}/debian/patches/series" | grep -v '#'); do
+    patch -Np1 -i "${srcdir}/debian/patches/${i}"
+  done
+
+
+  find . -type f | xargs sed -i 's@^#!.*python$@#!/usr/bin/python2@'
+
+  python2 ./waf configure --prefix=/usr
+  python2 ./waf build
+}
+
+package() {
+  cd "$srcdir/${pkgname%-ubuntu}-$pkgver+${_gitver}"
+
+  python2 ./waf install --destdir=$pkgdir
+
+  mv "$pkgdir/etc/gconf" "$pkgdir/usr/share"
+
+  # Remove panel applet that incompatible with GNOME Panel 3
+  #rm -r "$pkgdir"/usr/lib/{bonobo,hamster-applet,python2.7/site-packages/hamster/applet.py}
+}
