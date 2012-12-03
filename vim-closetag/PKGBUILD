@@ -1,8 +1,9 @@
-# Maintainer: Laszlo Papp <djszapi @ gmail at com>
+# Contributor: Laszlo Papp <djszapi @ gmail at com>
+# Maintainer: Wei Qiu <wei at qiu dot es>
 pkgname=vim-closetag
 pkgver=0.9.1
 _scriptid=4318
-pkgrel=2
+pkgrel=3
 pkgdesc="Functions and mappings to close open HTML/XML tags"
 arch=(i686 x86_64)
 url="http://www.vim.org/scripts/script.php?script_id=13"
