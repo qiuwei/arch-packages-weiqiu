@@ -1,7 +1,7 @@
 # Maintainer: Wei Qiu <wei at qiu dot es>
 pkgname=vim-paredit
 pkgver=0.9.9
-_scriptid=3998
+_scriptid=19001
 pkgrel=1
 pkgdesc="Provide Emacs like Paredit Mode: Structured Editing of Lisp S-expressions "
 arch=(i686 x86_64)
@@ -10,11 +10,13 @@ license=('custom')
 depends=(vim)
 groups=('vim-plugins')
 install=vimdoc.install
-source=(paredit.vim::http://www.vim.org/scripts/download_script.php?src_id=${_scriptid}
+source=(paredit.zip::http://www.vim.org/scripts/download_script.php?src_id=${_scriptid}
         )
-md5sums=('d8df3073939c447ca4a0029f70f6dc3a')
+md5sums=('d360d4f4795a2b42a6a58a5cf3a47470')
 
 build() {
-    install -Dm644 ${srcdir}/paredit.vim ${pkgdir}/usr/share/vim/vim73//plugin/paredit.vim || return 1
+    cd "$srcdir"
+    install -Dm644 plugin/paredit.vim ${pkgdir}/usr/share/vim/vim73//plugin/paredit.vim || return 1
+    install -Dm644 doc/paredit.txt ${pkgdir}/usr/share/vim/vim73//doc/paredit.txt || return 1
 }
 
