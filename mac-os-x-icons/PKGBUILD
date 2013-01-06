@@ -7,7 +7,7 @@ arch=('any')
 url="http://www.noobslab.com/"
 license=('unknown')
 source=('https://launchpad.net/~noobslab/+archive/themes/+files/mac-os-x-icons_3.6~quantal.tar.gz')
-md5sums=('bd8c4616deb5eba7a6c1c0729c60a150')
+md5sums=('0a6637d1ec59f3e656430b2edf42e1d5')
 build() {
   cd "$srcdir/icons"
   mkdir -p "${pkgdir}"/usr/share/icons
