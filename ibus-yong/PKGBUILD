@@ -5,7 +5,7 @@ pkgname=ibus-yong
 pkgver=20130111
 pkgrel=1
 _realver="$pkgver"
-pkgdesc="A Chinese input method"
+pkgdesc="A Chinese input method yong with ibus support. Install this one if you want to use it under ibus"
 arch=(i686 x86_64)
 url="http://yong.uueasy.com/"
 license=("freeware")
@@ -13,7 +13,7 @@ source=("http://ly50247.googlecode.com/files/yong-lin-${pkgver}.7z")
 makedepends=("p7zip")
 
 build() {
-    cd $srcdir/$pkgname
+    cd $srcdir/${pkgname#ibus-}
     [[ "$CARCH" = "x86_64" ]] && rm gtk-im/* && mv l64/* . 
     rm -rf l64
     mv yong.chm README.txt doc

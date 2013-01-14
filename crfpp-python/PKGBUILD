@@ -5,11 +5,12 @@
 pkgname=crfpp-python2
 pkgver=0.57
 pkgrel=2
-pkgdesc="A Conditional Random Field implementation"
+pkgdesc="A Conditional Random Field implementation with python2 interface"
 provides="crfpp"
 url="http://crfpp.sourceforge.net"
 arch=(x86_64 i686)
 license=(LGPL BSD)
+depends=(python2)
 source=(http://crfpp.googlecode.com/files/CRF%2B%2B-${pkgver}.tar.gz)
 
 build() {
